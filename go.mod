@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/ProtonMail/gopenpgp/v2 v2.10.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
 	golang.org/x/sys v0.44.0 // indirect

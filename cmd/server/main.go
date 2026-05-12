@@ -2,6 +2,7 @@ package main
 
 import (
 	"bank-service/internal/logger"
+	"bank-service/internal/security"
 	"log"
 	"net/http"
 	"os"
@@ -20,6 +21,11 @@ func main() {
 		log.Println("no .env file found, using system env")
 	}
 	logger.Init()
+
+	err = security.InitPGP()
+	if err != nil {
+		logger.Log.Fatal(err)
+	}
 
 	database, err := db.Connect()
 	if err != nil {

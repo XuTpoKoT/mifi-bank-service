@@ -5,6 +5,8 @@ import (
 	"bank-service/internal/repository"
 	"bank-service/internal/security"
 	"errors"
+	"regexp"
+	"strings"
 )
 
 type AuthService struct {
@@ -17,9 +19,31 @@ func NewAuthService(
 	return &AuthService{r}
 }
 
+var emailRegex = regexp.MustCompile(
+	`^[^\s@]+@[^\s@]+\.[^\s@]+$`,
+)
+
 func (s *AuthService) Register(
 	username, email, password string,
 ) error {
+	if len(username) < 3 {
+		return errors.New(
+			"username too short",
+		)
+	}
+
+	if !emailRegex.MatchString(email) {
+		return errors.New(
+			"invalid email",
+		)
+	}
+
+	if len(password) < 6 {
+		return errors.New(
+			"password too short",
+		)
+	}
+
 	hash, err := security.Hash(password)
 	if err != nil {
 		return err
@@ -31,7 +55,19 @@ func (s *AuthService) Register(
 		PasswordHash: hash,
 	}
 
-	return s.users.Create(user)
+	err = s.users.Create(user)
+	if err != nil {
+		if strings.Contains(
+			err.Error(),
+			"users_email_key",
+		) {
+			return errors.New(
+				"email already exists",
+			)
+		}
+		return err
+	}
+	return nil
 }
 
 func (s *AuthService) Login(

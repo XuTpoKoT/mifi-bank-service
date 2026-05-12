@@ -55,10 +55,20 @@ func (s *CardService) Create(
 		return nil, "", "", err
 	}
 
+	encPAN, err := security.Encrypt(pan)
+	if err != nil {
+		return nil, "", "", err
+	}
+
+	encExpiry, err := security.Encrypt(expiry)
+	if err != nil {
+		return nil, "", "", err
+	}
+
 	card := &models.Card{
 		AccountID:       accountID,
-		EncryptedPAN:    security.Encrypt(pan),
-		EncryptedExpiry: security.Encrypt(expiry),
+		EncryptedPAN:    encPAN,
+		EncryptedExpiry: encExpiry,
 		PanHMAC:         panHMAC,
 		CVVHash:         cvvHash,
 	}
