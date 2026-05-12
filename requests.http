@@ -1,0 +1,77 @@
+@host = http://localhost:8080
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzg2NTM2NzMsInVzZXJfaWQiOjF9.EEtVfH03t8RhuQcEvOYPtnsRph4pZ8Wuk-9dbFcbwUk
+
+### Регистрация
+POST {{host}}/register
+Content-Type: application/json
+
+{
+  "username": "dima",
+  "email": "dima@mail.com",
+  "password": "dima"
+}
+
+###
+
+### Логин (автоматически сохранит token)
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "dima@mail.com",
+  "password": "dima"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+###
+
+### Создать счёт
+POST {{host}}/accounts
+Authorization: Bearer {{token}}
+
+###
+
+### Пополнить счёт #1
+POST {{host}}/accounts/topup
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": 5000
+}
+
+###
+
+### Перевод со счёта 1 на счёт 2
+POST {{host}}/transfer
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "from_account_id": 1,
+  "to_account_id": 2,
+  "amount": 1000
+}
+
+###
+
+### Выпустить карту
+POST {{host}}/cards
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "account_id": 1
+}
+
+### Получить мои счета
+GET {{host}}/accounts
+Authorization: Bearer {{token}}
+
+###
+
+### Получить мои карты
+GET {{host}}/cards
+Authorization: Bearer {{token}}

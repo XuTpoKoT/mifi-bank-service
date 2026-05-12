@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bank-service/internal/logger"
 	"log"
 	"net/http"
 	"os"
@@ -18,10 +19,11 @@ func main() {
 	if err != nil {
 		log.Println("no .env file found, using system env")
 	}
+	logger.Init()
 
 	database, err := db.Connect()
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	r := router.Setup(database)
@@ -31,7 +33,7 @@ func main() {
 		port = "8080"
 	}
 
-	log.Println("server started on :" + port)
+	logger.Log.Info("server started on :" + port)
 
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	logger.Log.Fatal(http.ListenAndServe(":"+port, r))
 }

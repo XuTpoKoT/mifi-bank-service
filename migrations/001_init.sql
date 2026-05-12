@@ -28,8 +28,8 @@ CREATE TABLE cards (
 
 CREATE TABLE transactions (
       id BIGSERIAL PRIMARY KEY,
-      from_account BIGINT,
-      to_account BIGINT,
+      from_account_id BIGINT,
+      to_account_id BIGINT,
       amount NUMERIC(15,2),
       type VARCHAR(30),
       created_at TIMESTAMP DEFAULT now()

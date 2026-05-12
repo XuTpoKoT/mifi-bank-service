@@ -1,5 +1,15 @@
 # Project
 
+## TODO
+- кредиты 
+- график платежей
+- scheduler
+
+## TODO
+- аналитика
+- SOAP ЦБ
+- email
+
 ### регистрация
 ```bash
 curl -X POST localhost:8080/register \
@@ -22,12 +32,33 @@ curl -X POST localhost:8080/login \
 ```
 
 
-### login
+### создать счёт
 ```bash
-
+curl -X POST localhost:8080/accounts \
+-H "Authorization: Bearer TOKEN"
 ```
 
-### login
+### пополнить
 ```bash
-
+curl -X POST localhost:8080/accounts/topup \
+    -H "Authorization: Bearer TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "account_id":1,
+      "amount":5000
+    }'
 ```
+
+### перевод
+```bash
+curl -X POST localhost:8080/transfer \
+    -H "Authorization: Bearer TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "from_account_id":1,
+      "to_account_id":2,
+      "amount":1000
+    }'
+```
+
+
