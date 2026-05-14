@@ -38,7 +38,7 @@ func (s *AuthService) Register(
 		)
 	}
 
-	if len(password) < 6 {
+	if len(password) < 3 {
 		return errors.New(
 			"password too short",
 		)

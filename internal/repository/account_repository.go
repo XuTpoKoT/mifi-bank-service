@@ -173,3 +173,38 @@ func (r *AccountRepository) FindByUserID(
 
 	return accounts, rows.Err()
 }
+
+func (r *AccountRepository) TopUpTx(
+	tx *sql.Tx,
+	accountID int64,
+	amount float64,
+) error {
+
+	_, err := tx.Exec(`
+		UPDATE accounts
+		SET balance = balance + $2
+		WHERE id = $1
+	`,
+		accountID,
+		amount,
+	)
+
+	return err
+}
+
+func (r *AccountRepository) Withdraw(
+	accountID int64,
+	amount float64,
+) error {
+
+	_, err := r.db.Exec(`
+		UPDATE accounts
+		SET balance = balance - $2
+		WHERE id = $1
+	`,
+		accountID,
+		amount,
+	)
+
+	return err
+}

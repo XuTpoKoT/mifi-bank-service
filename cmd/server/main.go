@@ -33,6 +33,7 @@ func main() {
 	}
 
 	r := router.Setup(database)
+	db.RunMigrations(os.Getenv("DATABASE_URL"))
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -1,7 +1,7 @@
 @host = http://localhost:8080
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzg2NTM2NzMsInVzZXJfaWQiOjF9.EEtVfH03t8RhuQcEvOYPtnsRph4pZ8Wuk-9dbFcbwUk
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzg4MzU0MDYsInVzZXJfaWQiOjF9.nAk3l8urmYB--fUd8e6O8RxJC19WIxJ3o6uKaDKHCA0
 
-### Регистрация
+### 1. Регистрация
 POST {{host}}/register
 Content-Type: application/json
 
@@ -11,9 +11,7 @@ Content-Type: application/json
   "password": "dima"
 }
 
-###
-
-### Логин (автоматически сохранит token)
+### 2. Логин (автоматически сохранит token)
 POST {{host}}/login
 Content-Type: application/json
 
@@ -24,15 +22,12 @@ Content-Type: application/json
 
 > {% client.global.set("token", response.body.token); %}
 
-###
-
-### Создать счёт
+### 3. Создать счёт
 POST {{host}}/accounts
 Authorization: Bearer {{token}}
 
-###
 
-### Пополнить счёт #1
+### 4. Пополнить счёт
 POST {{host}}/accounts/topup
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -42,9 +37,7 @@ Content-Type: application/json
   "amount": 5000
 }
 
-###
-
-### Перевод со счёта 1 на счёт 2
+### 5. Перевод со счёта 1 на счёт 2
 POST {{host}}/transfer
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -55,9 +48,7 @@ Content-Type: application/json
   "amount": 1000
 }
 
-###
-
-### Выпустить карту
+### 6. Выпустить карту
 POST {{host}}/cards
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -66,12 +57,25 @@ Content-Type: application/json
   "account_id": 1
 }
 
-### Получить мои счета
+### 7. Получить мои счета
 GET {{host}}/accounts
 Authorization: Bearer {{token}}
 
-###
-
-### Получить мои карты
+### 8. Получить мои карты
 GET {{host}}/cards
+Authorization: Bearer {{token}}
+
+### 9. Оформить кредит
+POST {{host}}/credits
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "principal": 100000,
+  "term_months": 12
+}
+
+### 10. График платежей
+GET {{host}}/credits/1/schedule
 Authorization: Bearer {{token}}

@@ -32,6 +32,18 @@ func Setup(db *sql.DB) *mux.Router {
 		cardService,
 	)
 
+	creditRepo := repository.NewCreditRepository(db)
+	scheduleRepo := repository.NewScheduleRepository(db)
+	creditService := service.NewCreditService(
+		db,
+		creditRepo,
+		accountRepo,
+		scheduleRepo,
+	)
+	creditHandler := handler.NewCreditHandler(
+		creditService,
+	)
+
 	r.HandleFunc(
 		"/register",
 		authHandler.Register,
@@ -73,6 +85,16 @@ func Setup(db *sql.DB) *mux.Router {
 	protected.HandleFunc(
 		"/cards",
 		cardHandler.GetAll,
+	).Methods("GET")
+
+	protected.HandleFunc(
+		"/credits",
+		creditHandler.Create,
+	).Methods("POST")
+
+	protected.HandleFunc(
+		"/credits/{creditId}/schedule",
+		creditHandler.GetSchedule,
 	).Methods("GET")
 
 	return r

@@ -37,17 +37,23 @@ CREATE TABLE transactions (
 
 CREATE TABLE credits (
      id BIGSERIAL PRIMARY KEY,
-     account_id BIGINT REFERENCES accounts(id),
-     principal NUMERIC(15,2),
-     rate NUMERIC(5,2),
-     term_months INT,
+     user_id BIGINT NOT NULL REFERENCES users(id),
+     account_id BIGINT NOT NULL REFERENCES accounts(id),
+     principal NUMERIC(15,2) NOT NULL,
+     annual_rate NUMERIC(5,2) NOT NULL,
+     term_months INT NOT NULL,
+     monthly_payment NUMERIC(15,2) NOT NULL,
+     remaining_debt NUMERIC(15,2) NOT NULL,
+     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
      created_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE payment_schedules (
    id BIGSERIAL PRIMARY KEY,
-   credit_id BIGINT REFERENCES credits(id),
-   due_date TIMESTAMP,
-   amount NUMERIC(15,2),
-   paid BOOLEAN DEFAULT FALSE
+   credit_id BIGINT NOT NULL REFERENCES credits(id),
+   due_date DATE NOT NULL,
+   amount NUMERIC(15,2) NOT NULL,
+   status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+   penalty NUMERIC(15,2) NOT NULL DEFAULT 0,
+   paid_at TIMESTAMP
 );
