@@ -200,10 +200,9 @@ Content-Type: application/json
 #### Response
 ```json
 {
-  "id": 1,
-  "account_id": 1,
-  "pan": "**** **** **** 1234",
-  "expiry": "12/30"
+  "card_id":2,
+  "cvv":"334",
+  "pan":"4276382603423394"
 }
 ```
 
