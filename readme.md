@@ -7,6 +7,7 @@
 - Операции с картами: генерация, просмотр, оплата.
 - Переводы между счетами и пополнение баланса.
 - Кредитные операции: оформление кредита, график платежей.
+- Scheduler: списание кредитных платежей каждые N часов и начисление штрафов при просрочке (+10%)
 
 ## Не реализовано
 - Аналитика финансовых операций.
@@ -24,6 +25,36 @@ docker-compose up -d
 ```bash
 go run cmd/server/main.go
 ```
+
+## Модели
+
+- Users (id, username, email, password_hash, created_at)
+- Accounts (id, user_id, balance, currency)
+- Cards (encrypted_pan, expiry, cvv_hash, pan_hmac)
+- Transactions
+- Credits
+- Payment schedules
+- 
+## Валидация
+- email: формат + уникальность
+- username: уникальность + длина
+- password: bcrypt hash
+
+## Middleware
+- JWT проверка токена
+- запрет неавторизованных запросов
+- добавление user_id в context
+
+## Безопасность
+- Пароли: bcrypt
+- CVV: bcrypt hash
+- PAN и expiry: PGP encryption
+- PAN integrity: HMAC-SHA256
+- Проверка прав доступа к счетам и картам
+
+## Логирование
+- Используется logrus
+- Уровни логирования: info / debug / error
 
 ## Тестирование функционала
 **Базовые переменные**
